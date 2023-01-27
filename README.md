@@ -8,7 +8,7 @@ The top module is ntru_prime_top.vhd, the corrosponding testbench is tb_ntru_top
 
 The constant "shares" in the file constants.pkg.vhd allows the configuration of the number of masking shares (at least 2).
 
-Only the parameter set sntrup761 is currently supported.
+Only decapsulation for the parameter set sntrup761 is currently supported.
 
 **Acknowledgments**
 
