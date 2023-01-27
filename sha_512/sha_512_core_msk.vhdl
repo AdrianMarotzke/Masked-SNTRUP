@@ -1,7 +1,7 @@
 --MIT License
 --
 --Original work Copyright (c) 2017 Danny Savory
---Modified work Copyright (c) 2020 Adrian Marotzke
+--Modified work Copyright (c) 2020, 2023 Adrian Marotzke
 --
 --Permission is hereby granted, free of charge, to any person obtaining a copy
 --of this software and associated documentation files (the "Software"), to deal
