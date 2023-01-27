@@ -1,0 +1,2 @@
+Copyright (c) 2021 Florian Bache and Tim Güneysu
+Copyright (c) 2023 Adrian Marotzke, Georg Land, Jan Richter-Brockmann
