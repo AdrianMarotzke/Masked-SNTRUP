@@ -16,4 +16,4 @@ The HPC gadgets in the folder "gadgets/lib_v" are from https://github.com/cassie
 
 The Masked Sklansky Adder in the folder gadets/hpc2-sklansky-adder-main is based on the work from Florian Bache and Tim Güneysu, and their paper "Boolean Masking for Arithmetic Additions at Arbitrary Order in Hardware"
 
-This implementation is based on the Streamlined NTRU Prime implementation by Bo-Yuan Peng, Adrian Marotzke, Ming-Han Tsai1, Bo-Yin Yang and Ho-Lin Chen, which is available at https://github.com/AdrianMarotzke/SNTRUP_on_FPGA
+This implementation is based on the Streamlined NTRU Prime implementation from the paper "Streamlined NTRU Prime on FPGA" by Bo-Yuan Peng, Adrian Marotzke, Ming-Han Tsai1, Bo-Yin Yang and Ho-Lin Chen, which is available at https://eprint.iacr.org/2021/1444 and  https://github.com/AdrianMarotzke/SNTRUP_on_FPGA
