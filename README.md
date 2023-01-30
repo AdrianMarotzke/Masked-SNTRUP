@@ -2,7 +2,7 @@
 
 **WARNING This is experimental code, do NOT use in production systems**
 
-This is a gate-level masked implementation of Streamlined NTRU Prime, and is the code from the paper "Gate-Level Masking of Streamlined NTRU Prime Decapsulation in Hardware". 
+This is a gate-level masked implementation of Streamlined NTRU Prime, and is the code from the paper "Gate-Level Masking of Streamlined NTRU Prime Decapsulation in Hardware", which is available here https://eprint.iacr.org/2023/105.  
 
 The top module is ntru_prime_top.vhd, the corrosponding testbench is tb_ntru_top_msk.vhd.
 
