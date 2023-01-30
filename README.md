@@ -4,7 +4,7 @@
 
 This is a gate-level masked implementation of Streamlined NTRU Prime, and is the code from the paper "Gate-Level Masking of Streamlined NTRU Prime Decapsulation in Hardware", which is available here https://eprint.iacr.org/2023/105.  
 
-The top module is ntru_prime_top.vhd, the corrosponding testbench is tb_ntru_top_msk.vhd.
+The top module is ntru_prime_top.vhd, the corresponding testbench is tb_ntru_top_msk.vhd.
 
 The constant "shares" in the file constants.pkg.vhd allows the configuration of the number of masking shares (at least 2).
 
