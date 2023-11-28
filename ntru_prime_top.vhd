@@ -9,40 +9,46 @@ use work.interfaces_32_ska.all;
 -- Top Module
 entity ntru_prime_top is
 	port(
-		clock                    : in  std_logic;
-		reset                    : in  std_logic;
-		rand_in                  : in  std_logic_vector(7 downto 0);
-		ready                    : out std_logic;
-		done                     : out std_logic;
-		start_key_gen            : in  std_logic;
-		start_encap              : in  std_logic;
-		start_decap              : in  std_logic;
-		set_new_public_key       : in  std_logic;
-		public_key_in            : in  std_logic_vector(7 downto 0);
-		public_key_input_address : out std_logic_vector(Cipher_bytes_bits - 1 downto 0);
-		public_key_is_set        : out std_logic;
-		set_new_private_key      : in  std_logic;
-		private_key_in           : in  std_logic_vector(7 downto 0);
-		private_key_in_address   : out std_logic_vector(SecretKey_length_bits - 1 downto 0);
-		private_key_is_set       : out std_logic;
-		cipher_output            : out std_logic_vector(7 downto 0);
-		cipher_output_valid      : out std_logic;
-		cipher_input             : in  std_logic_vector(7 downto 0);
-		cipher_input_address     : out std_logic_vector(Cipher_bytes_bits - 1 downto 0);
-		k_hash_out               : out std_logic_vector(63 downto 0);
-		k_out_valid              : out std_logic;
-		private_key_out          : out std_logic_vector(7 downto 0);
-		private_key_out_valid    : out std_logic;
-		public_key_out           : out std_logic_vector(7 downto 0);
-		public_key_out_valid     : out std_logic;
-		--random_enable            : out std_logic;
-		--random_output            : in  std_logic_vector(31 downto 0);
-		random_roh_enable        : out std_logic;
-		random_roh_output        : in  std_logic_vector(31 downto 0);
-		random_small_enable      : out std_logic;
-		random_small_output      : in  std_logic_vector(31 downto 0);
-		random_short_enable      : out std_logic;
-		random_short_output      : in  std_logic_vector(31 downto 0)
+		clock                    : in  std_logic;							-- Clock signal
+		reset                    : in  std_logic;							-- Active high reset signal
+		rand_in                  : in  std_logic_vector(7 downto 0); 		-- Randomness for masking. This is only 8 bit wise to simplifiy the testbench, and should be changed to std_logic_vector(adder64_rand_requirement - 1 downto 0) for proper deployment
+		ready                    : out std_logic;							-- Read signal, design can process new commands
+		done                     : out std_logic;							-- Output signal indicating operation is complete
+		--
+		start_key_gen            : in  std_logic;							-- Not used
+		start_encap              : in  std_logic;							-- Not used
+		--
+		start_decap              : in  std_logic;							-- Input signal to start decapsulation. A private key must be set first
+		--
+		set_new_public_key       : in  std_logic;							-- Not used
+		public_key_in            : in  std_logic_vector(7 downto 0);		-- Not used
+		public_key_input_address : out std_logic_vector(Cipher_bytes_bits - 1 downto 0);	-- Not used
+		public_key_is_set        : out std_logic;							-- Not used
+		--
+		set_new_private_key      : in  std_logic;							-- Input signal to load a new private key
+		private_key_in           : in  std_logic_vector(7 downto 0);		-- Private key input signal
+		private_key_in_address   : out std_logic_vector(SecretKey_length_bits - 1 downto 0); -- Private key memory address signal
+		private_key_is_set       : out std_logic;							-- Indicates a private key has be input & decoded
+		--
+		cipher_output            : out std_logic_vector(7 downto 0);		-- Not used
+		cipher_output_valid      : out std_logic;							-- Not used
+		--
+		cipher_input             : in  std_logic_vector(7 downto 0);		-- Ciphertext input signal
+		cipher_input_address     : out std_logic_vector(Cipher_bytes_bits - 1 downto 0); -- Ciphertext memory address signal
+		--
+		k_hash_out               : out std_logic_vector(63 downto 0);		-- Shared secret output signal. This signal is unmasked. Deployments should consider keeping it masked.
+		k_out_valid              : out std_logic;							-- Shared secret output valid signal
+		--
+		private_key_out          : out std_logic_vector(7 downto 0);		-- Not used
+		private_key_out_valid    : out std_logic;							-- Not used
+		public_key_out           : out std_logic_vector(7 downto 0);		-- Not used
+		public_key_out_valid     : out std_logic;							-- Not used
+		random_roh_enable        : out std_logic;							-- Not used
+		random_roh_output        : in  std_logic_vector(31 downto 0);		-- Not used
+		random_small_enable      : out std_logic;							-- Not used
+		random_small_output      : in  std_logic_vector(31 downto 0);		-- Not used
+		random_short_enable      : out std_logic;							-- Not used
+		random_short_output      : in  std_logic_vector(31 downto 0)		-- Not used
 	);
 end entity ntru_prime_top;
 
@@ -135,6 +141,7 @@ begin
 	encrypt_rand_in <= sha_rand_in(and_pini_nrnd * q_num_bits + level_rand_requirement * 2 + and_pini_mul_nrnd * 46 - 1 downto 0);
 	rq_mult_rand_in <= sha_rand_in(level_rand_requirement * 2 + and_pini_mul_nrnd * q_num_bits * 3 - 1 downto 0);
 
+	-- The following code is to simplify the testbench, and should be removed before deployment
 	serial_in_rand : process(clock, reset) is
 	begin
 		if reset = '1' then
@@ -143,7 +150,10 @@ begin
 			sha_rand_in(adder64_rand_requirement - 1 downto 0) <= sha_rand_in(adder64_rand_requirement - 9 downto 0) & rand_in after 1 ns;
 		end if;
 	end process serial_in_rand;
-
+	-- Use this instead:
+	
+	-- sha_rand_in <= rand_in;
+	
 	-----------------------------------------------------------------------------------------------
 	------------------- Shared modules
 	-----------------------------------------------------------------------------------------------
