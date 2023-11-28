@@ -66,6 +66,7 @@ architecture RTL of tb_ntru_top_msk is
 	signal cipher_output_valid      : std_logic;
 	signal cipher_input             : std_logic_vector(7 downto 0);
 	signal cipher_input_address     : std_logic_vector(Cipher_bytes_bits - 1 downto 0);
+	signal k_hash_out_tb            : std_logic_vector(255 downto 0);	
 	signal k_hash_out               : std_logic_vector(63 downto 0);
 	signal k_out_valid              : std_logic;
 	signal private_key_out          : std_logic_vector(7 downto 0);
@@ -219,6 +220,43 @@ begin
 		rand_in <= std_logic_vector(to_unsigned(integer(rand * range_of_rand), 8));
 		wait until rising_edge(clock);
 	end process gen_random;
+
+	check_hash_output : process is
+		file read_file    : text;
+		variable line_v   : line;
+		variable temp8bit : string(1 to 64);
+	begin
+		file_open(read_file, "./tb_stimulus/KAT_761/hash_tb", read_mode);
+
+		wait until k_out_valid = '1';
+
+		for i in 0 to kat_num loop
+			readline(read_file, line_v);
+		end loop;
+
+		read(line_v, temp8bit);
+		k_hash_out_tb <= to_std_logic_vector(temp8bit);
+
+		wait until rising_edge(clock) and k_out_valid = '1';
+
+		assert k_hash_out_tb(255 downto 192) = k_hash_out report "Mismatch in k hash output 0" severity failure;
+
+		wait until rising_edge(clock) and k_out_valid = '1';
+
+		assert k_hash_out_tb(191 downto 128) = k_hash_out report "Mismatch in k hash output 1" severity failure;
+
+		wait until rising_edge(clock) and k_out_valid = '1';
+
+		assert k_hash_out_tb(127 downto 64) = k_hash_out report "Mismatch in k hash output 2" severity failure;
+
+		wait until rising_edge(clock) and k_out_valid = '1';
+
+		assert k_hash_out_tb(63 downto 0) = k_hash_out report "Mismatch in k hash output 3" severity failure;
+
+		file_close(read_file);
+
+		wait until rising_edge(clock);
+	end process check_hash_output;
 	
 	--rand_in <= (others => '0');
 end architecture RTL;
